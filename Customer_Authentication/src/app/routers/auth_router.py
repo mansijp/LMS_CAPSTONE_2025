@@ -204,7 +204,7 @@ async def about_page(request: Request):
 # sending emails to the developers of the website
 
 API_KEY = "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"
-SENDER_EMAIL = "lmscapstone38@gmail.com"
+SENDER_EMAIL = "lmscapstonemansi@gmail.com"
 
 @router.post("/send-message")
 @limiter.limit("60/minute")
