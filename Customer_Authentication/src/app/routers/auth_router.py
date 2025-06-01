@@ -9,9 +9,9 @@ import os
 from urllib.parse import urlencode
 from slowapi import Limiter
 
-CATALOG_SERVICE_URL = "https://34.47.39.132/catalog"
-USER_HOME_PAGE = "https://34.47.39.132/search/home"
-MYLIBRARY_PAGE = "https://34.47.39.132/mylib"
+CATALOG_SERVICE_URL = "http://127.0.0.1:8002/catalog"
+USER_HOME_PAGE = "http://127.0.0.1:8003/search/home"
+MYLIBRARY_PAGE = "http://127.0.0.1:8005/mylib"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 templates_dir = os.path.join(base_dir, "..", "views", "templates")
