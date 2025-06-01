@@ -8,9 +8,9 @@ from models.reservations import *
 import os
 from io import BytesIO
 
-USER_LOGIN_PAGE = "https://34.47.39.132/auth/login"
-USER_LOGOUT_PAGE = "https://34.47.39.132/auth/logout"
-MYLIBRARY_PAGE = "https://34.47.39.132/mylib/dashboard"
+USER_LOGIN_PAGE = "http://127.0.0.1:8001/auth/login"
+USER_LOGOUT_PAGE = "http://127.0.0.1:8001/auth/logout"
+MYLIBRARY_PAGE = "http://127.0.0.1:8005/mylib/dashboard"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 templates_dir = os.path.join(base_dir, "..", "views", "templates")

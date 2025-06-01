@@ -7,10 +7,10 @@ from datetime import datetime
 import os, base64, json
 from io import BytesIO
 
-MANAGER_LOGIN_PAGE = "https://34.47.39.132/auth/manager"
-ADMIN_DASHBOARD_PAGE = "https://34.47.39.132/catalog/admin_dashboard"
-MANAGER_CATALOG_PAGE = "https://34.47.39.132/catalog/view-inventory"
-USER_MANAGEMENT_PAGE = "https://34.47.39.132/userManage/"
+MANAGER_LOGIN_PAGE = "http://127.0.0.1:8001/auth/manager"
+ADMIN_DASHBOARD_PAGE = "http://127.0.0.1:8002/catalog/admin_dashboard"
+MANAGER_CATALOG_PAGE = "http://127.0.0.1:8002/catalog/view-inventory"
+USER_MANAGEMENT_PAGE = "http://127.0.0.1:8006/userManage/"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 templates_dir = os.path.join(base_dir, "..", "views", "templates")

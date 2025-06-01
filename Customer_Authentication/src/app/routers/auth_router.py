@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import os
 from urllib.parse import urlencode
 from slowapi import Limiter
+from dotenv import load_dotenv
 
 CATALOG_SERVICE_URL = "http://127.0.0.1:8002/catalog"
 USER_HOME_PAGE = "http://127.0.0.1:8003/search/home"
@@ -203,8 +204,9 @@ async def about_page(request: Request):
 
 # sending emails to the developers of the website
 
-API_KEY = "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"
-SENDER_EMAIL = "lmscapstonemansi@gmail.com"
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+API_KEY = os.getenv("API_KEY")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
 @router.post("/send-message")
 @limiter.limit("60/minute")
