@@ -129,6 +129,8 @@ celerybeat.pid
 
 # Environments
 .env
+**/.env
+**/.env.*
 .venv
 env/
 venv/
@@ -172,4 +174,3 @@ cython_debug/
 
 # Ignore MongoDB backup folder
 backup/
-

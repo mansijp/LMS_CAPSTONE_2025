@@ -1,0 +1,88 @@
+services:
+  customer_authentication:
+    image: auth:v1
+    build:
+      context: ./Customer_Authentication
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./Customer_Authentication/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  catalog_management:
+    image: catalog:v1
+    build:
+      context: ./Catalog_Management
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./Catalog_Management/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  search:
+    image: search:v1
+    build:
+      context: ./Search
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./Search/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  reservations:
+    image: holds:v1
+    build:
+      context: ./Reservations
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./Reservations/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  mylibrary:
+    image: mylib:v1
+    build:
+      context: ./MyLibrary
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./MyLibrary/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  user_management:
+    image: users:v1
+    build:
+      context: ./User_Management
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8006"
+    volumes:
+      - ./User_Management/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+  notifications:
+    image: notif:v1
+    build:
+      context: ./Notifications
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./Notifications/src/app:/app
+    environment:
+      - ENVIRONMENT=dev
+
+
+# docker-compose up --build (to build and run all)
+# docker-compose down (to shut down all)

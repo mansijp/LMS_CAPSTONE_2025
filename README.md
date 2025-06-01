@@ -1,9 +1,17 @@
 
 # Library Management System (LMS)
 
-**Access the Application Here:** 
+**Access the Application Here (after following the installation guide):** 
 
-[Library Management System Website](https://34.47.39.132/auth/)
+[Library Management System Website](http://127.0.0.1:8001/auth/)
+
+## Project Overview
+
+- Full-stack Python web app using microservices
+- Built for digital media management in libraries
+- Supports user login, borrowing, searching, and returning materials
+- Hosts an entire admin login and management system
+- Deployed using Docker, Kubernetes, Google Cloud, and Nginx
 
 ## Installation Guide
 
@@ -33,48 +41,38 @@ Make sure you have the following installed:
 1. **Clone the entire repository:**
    ```sh
    git clone https://github.com/mansijp/LMS_CAPSTONE_2025.git
+   cd LMS_CAPSTONE_2025
    ```
 
-2. **Navigate to each microservice folder:**
-   For each of the 7 microservices, follow these steps:
+2. **Create or verify the ```docker-compose.yml``` file:**
 
+   This file should be at the **root of the repository** and configured to build and run all the microservices on their respective ports.
+
+3. **Run all microservices together using Docker Compose:**
+
+   Make sure you have Docker Desktop installed (link provided above), and run the following command in a new terminal:
    ```sh
-   cd <microservice-folder-names>
+   docker-compose up --build
    ```
-
-3. **Create a Docker image for each microservice:**
-   Make sure you have Docker Desktop installed (link provided above), and run the following command in each microservice directory:
-   ```sh
-   docker build -t <microservicename1> .
-   docker build -t <microservicename2> .
-   docker build -t <microservicename3> .
-   docker build -t <microservicename4> .
-   docker build -t <microservicename5> .
-   docker build -t <microservicename6> .
-   docker build -t <microservicename7> .
-   ```
-
-4. **Run all the Docker images:**
-   Open a _**new terminal**_ for each microservice and run the Docker containers on different ports:
-   ```sh
-   docker run -p 8001:8001 <microservicename1>
-   docker run -p 8002:8002 <microservicename2>
-   docker run -p 8003:8003 <microservicename3>
-   docker run -p 8004:8004 <microservicename4>
-   docker run -p 8005:8005 <microservicename5>
-   docker run -p 8006:8006 <microservicename6>
-   docker run -p 8008:8008 <microservicename7>
-   ```
+   This command will build and run all the Docker images automatically.
 
 5. **Access the microservices:**
+
    After running the Docker containers, you can access the application through the first microservice
    ```sh
-   http://127.0.0.1:8001/microservicename1
+   http://127.0.0.1:8001/auth
+   ```
+
+6. **To stop all services:**
+
+   In the terminal where Docker Compose is running, press ```Ctrl + C``` or run:
+   ```sh
+   docker-compose down
    ```
 
 ### Microservice Folder Names and Ports
 
-| No. | Microservice Folder Name    | Port  |
+| No. | Microservice Name    | Port  |
 |-----|--------------------------|-------|
 | 1   | Customer_Authentication  | 8001  |
 | 2   | Catalog_Management       | 8002  |
@@ -83,14 +81,6 @@ Make sure you have the following installed:
 | 5   | MyLibrary                | 8005  |
 | 6   | User_Management          | 8006  |
 | 7   | Notifications            | 8008  |
-
-## Project Overview
-
-- Full-stack Python web app using microservices
-- Built for digital media management in libraries
-- Supports user login, borrowing, searching, and returning materials
-- Hosts an entire admin login and management system
-- Deployed using Docker, Kubernetes, Google Cloud, and Nginx
 
 ## Technologies Used
 
