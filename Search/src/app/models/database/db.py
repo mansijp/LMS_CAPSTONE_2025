@@ -3,10 +3,10 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables
-load_dotenv(dotenv_path="./app/config/.env")
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../../.env'))
 
 # MongoDB Connection (pymongo)
-MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://lmscapstonemansi:capstonemansi25@primary.ncu4vwq.mongodb.net/?retryWrites=true&w=majority&appName=LMSCluster")
+MONGO_URL = os.getenv("MONGO_URL")
 client = MongoClient(MONGO_URL)
 db = client["sample_mflix"]
 
