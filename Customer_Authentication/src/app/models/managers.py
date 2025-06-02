@@ -36,3 +36,18 @@ def get_manager_by_email(email: str):
     manager["_id"] = str(manager["_id"])
     
     return Manager(**manager)
+
+
+@app.put("/managers/{email}/password", response_model=dict)
+def change_password_manager(email: str, new_password: str):
+    manager = get_manager_by_email(email)
+    print(f"email = {email}, manager = {manager}")
+    if not manager:
+        raise HTTPException(status_code=404, detail="Manager not found")
+    result = db["managers"].update_one(
+        {"email": email},
+        {"$set": {"passwordHash": new_password}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Password update failed")
+    return {"message": "Password updated successfully"}

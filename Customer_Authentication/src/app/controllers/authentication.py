@@ -37,10 +37,24 @@ def handle_forgot_password(email: str):
         return True
     return False
 
+def handle_forgot_password_manager(managerId: str):
+    manager = get_manager(managerId)
+    if manager.email is not None:
+        return manager.email
+    return None
+
 def handle_reset_password(request: Request, first_pass: str, second_pass: str):
     verif_email = get_verif_email(request)
     if first_pass == second_pass:
         response = change_password(verif_email, first_pass)
+        if response and response["message"]:
+            return response["message"]
+    return None
+
+def handle_reset_password_manager(request: Request, first_pass: str, second_pass: str):
+    verif_email = get_verif_email(request)
+    if first_pass == second_pass:
+        response = change_password_manager(verif_email, first_pass)
         if response and response["message"]:
             return response["message"]
     return None

@@ -10,7 +10,7 @@ from models.database.db import get_db, close_db
 from fastapi.responses import RedirectResponse
 from controllers.token import *
 
-load_dotenv(dotenv_path='./app/config/.env')
+ 
 
 app = FastAPI()
 

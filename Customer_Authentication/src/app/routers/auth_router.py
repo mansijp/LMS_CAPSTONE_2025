@@ -95,6 +95,10 @@ async def register_user(fname: str = Form(...), lname: str = Form(...), email: s
 async def forgot_password_page(request: Request):
     return templates.TemplateResponse("forgot_password.html", {"request": request})
 
+@router.get("/forgot-password-manager", response_class=HTMLResponse)
+async def forgot_password_manager_page(request: Request):
+    return templates.TemplateResponse("forgot_password_manager.html", {"request": request})
+
 # Route to handle password reset
 @router.post("/forgot-password", response_class=HTMLResponse)
 async def forgot_password(response: Response, request: Request, email: str = Form(...)):
@@ -105,39 +109,95 @@ async def forgot_password(response: Response, request: Request, email: str = For
         verif_code = generate_code()
         code_token = generate_code_token(verif_code, expiration_time) 
         
-        response = RedirectResponse(url="/auth/verification-code", status_code=status.HTTP_303_SEE_OTHER)
+        response = RedirectResponse(url=f"/auth/verification-code/{False}", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="verif_code", value=code_token, httponly=True, samesite="None", secure=True , path="/", expires=expires, max_age=TOKEN_EXPIRATION_TIME)
         response.set_cookie(key="verif_email", value=email, httponly=True, samesite="None", secure=True , path="/", expires=expires, max_age=TOKEN_EXPIRATION_TIME)
             
         send_verif_email(email, verif_code)
         return response
     
-    return templates.TemplateResponse("forgot_password.html", {"request": request, "error": "Email is not registered."})   
+    return templates.TemplateResponse("forgot_password.html", {"request": request, "error": "Email is not registered."}) 
+
+@router.post("/forgot-password-manager", response_class=HTMLResponse)
+async def forgot_password_manager(response: Response, request: Request, managerId: str = Form(...)):
+    result = handle_forgot_password_manager(managerId)
+    if result:
+        expiration_time = datetime.utcnow() + timedelta(minutes=10)
+        expires = expiration_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        verif_code = generate_code()
+        code_token = generate_code_token(verif_code, expiration_time) 
+        
+        email = result
+        
+        response = RedirectResponse(url=f"/auth/verification-code/{True}", status_code=status.HTTP_303_SEE_OTHER)
+        response.set_cookie(key="verif_code", value=code_token, httponly=True, samesite="None", secure=True , path="/", expires=expires, max_age=TOKEN_EXPIRATION_TIME)
+        response.set_cookie(key="verif_email", value=email, httponly=True, samesite="None", secure=True , path="/", expires=expires, max_age=TOKEN_EXPIRATION_TIME)
+        
+        send_verif_email(email, verif_code)
+        return response
+    
+    return templates.TemplateResponse("forgot_password_manager.html", {"request": request, "error": "Email is not registered."})
+
+@router.get("/manager-email/{managerId}")
+async def manager_email(request: Request, managerId: str):
+    email = get_manager(managerId).email
+    if email:
+        return JSONResponse(content={"msg": email}, status_code=200)
+    return JSONResponse(content={"msg": "[Error] Manager not found"}, status_code=404)
 
 @router.get("/home", response_class=HTMLResponse)
 async def home_page(request: Request):
     return RedirectResponse(url=USER_HOME_PAGE ,status_code=status.HTTP_303_SEE_OTHER)
 
-@router.get("/verification-code", response_class=HTMLResponse)
-async def verification_code_page(request: Request):
-    return templates.TemplateResponse("verification_code.html", {"request": request})
+@router.get("/verification-code/{isManager}", response_class=HTMLResponse)
+async def verification_code_page(request: Request, isManager: bool):
+    return templates.TemplateResponse("verification_code.html", {"request": request, "isManager": isManager})
 
-@router.post("/verification-code", response_class=HTMLResponse)
-async def verification_code(request: Request, code: int = Form(...)):
+@router.post("/verification-code/{isManager}", response_class=HTMLResponse)
+async def verification_code(request: Request, isManager: bool, code: int = Form(...)):
     isValid = validate_code(request, code)
     if isValid:
-        response = RedirectResponse(url="/auth/reset-password", status_code=status.HTTP_303_SEE_OTHER)
-        response.delete_cookie("verif_code")
-        return response
+        if not isManager:
+            response = RedirectResponse(url="/auth/reset-password", status_code=status.HTTP_303_SEE_OTHER)
+            response.delete_cookie("verif_code")
+            return response
+        else:
+            response = RedirectResponse(url="/auth/reset-password-manager", status_code=status.HTTP_303_SEE_OTHER)
+            response.delete_cookie("verif_code")
+            return response
+        
     return templates.TemplateResponse("verification_code.html", {"request": request, "error": "Invalid verification code."})
 
 @router.get("/reset-password", response_class=HTMLResponse)
 async def reset_password_page(request: Request):
     return templates.TemplateResponse("reset_password.html", {"request": request})
 
+@router.get("/reset-password-manager", response_class=HTMLResponse)
+async def reset_password_manager_page(request: Request):
+    return templates.TemplateResponse("reset_password_manager.html", {"request": request})
+
 @router.post("/reset_password", response_class=HTMLResponse)
 async def reset_password(request: Request, first: str = Form(...), second: str = Form(...)):
     result = handle_reset_password(request, first, second)
+    if result == "Password updated successfully":
+        response = JSONResponse(
+            status_code=200,
+            content={"success": "Password changed successfully"})
+        response.delete_cookie("verif_email")
+        return response
+    elif result == "New password must be different from old password":
+        response = JSONResponse(
+            status_code=409,
+            content={"error": "New password must be different from old password"})
+        return response
+    
+    return JSONResponse(
+            status_code=400,
+            content={"error": "Passwords do not match"})
+    
+@router.post("/reset_password_manager", response_class=HTMLResponse)
+async def reset_password_manager(request: Request, first: str = Form(...), second: str = Form(...)):
+    result = handle_reset_password_manager(request, first, second)
     if result == "Password updated successfully":
         response = JSONResponse(
             status_code=200,

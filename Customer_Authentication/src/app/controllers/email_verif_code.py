@@ -40,7 +40,8 @@ def validate_code(request: Request, entered_code: str):
 def send_verif_email(email, code):
     # MORE INFO: https://app.brevo.com/settings/keys/smtp
     
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+    load_dotenv()
+    
     API_KEY = os.getenv("API_KEY")
     SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
@@ -68,7 +69,7 @@ def send_verif_email(email, code):
         
 def send_register_email(email, fName, lName):
     # MORE INFO: https://app.brevo.com/settings/keys/smtp
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+    load_dotenv()
     API_KEY = os.getenv("API_KEY")
     SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 

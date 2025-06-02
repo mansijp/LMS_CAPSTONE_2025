@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 def send_due_today_email(email, title, name, today_date, bookID):
     
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+    load_dotenv()
     API_KEY = os.getenv("API_KEY")
     SENDER_EMAIL = os.getenv("SENDER_EMAIL")
     
@@ -34,7 +34,7 @@ def send_due_today_email(email, title, name, today_date, bookID):
 
 def send_due_soon_email(email, title, name, bookID, dueDate):
     
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+    load_dotenv()
     API_KEY = os.getenv("API_KEY")
     SENDER_EMAIL = os.getenv("SENDER_EMAIL")
     
@@ -62,7 +62,7 @@ def send_due_soon_email(email, title, name, bookID, dueDate):
 
 def send_avail_now_email(email, title, name, rating, isbn):
     
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../../.env'))
+    load_dotenv()
     API_KEY = os.getenv("API_KEY")
     SENDER_EMAIL = os.getenv("SENDER_EMAIL")
     
