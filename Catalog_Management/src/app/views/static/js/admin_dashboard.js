@@ -17,3 +17,7 @@ function manageUsers(){
 function manageNotifications(){
     location.href = "/catalog/notifications";
 }
+
+function manageHolds(){
+    location.href = "/catalog/manage-holds";
+}

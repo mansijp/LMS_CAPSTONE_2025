@@ -6,7 +6,7 @@ from controllers.user_controller import *
 from fastapi.responses import JSONResponse
 
 MANAGER_LOGIN_PAGE = "http://127.0.0.1:8001/auth/manager"
-MANAGER_DASHBOARD_PAGE = "http://127.0.0.1:8002/catalog/dashboard"
+MANAGER_DASHBOARD_PAGE = "http://127.0.0.1:8002/catalog/admin_dashboard"
 MANAGER_CATALOG_PAGE = "http://127.0.0.1:8002/catalog/view-inventory"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))

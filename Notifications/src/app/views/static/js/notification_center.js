@@ -11,6 +11,7 @@ async function fetchTodayReturns() {
     const data = await response.json();
     console.log(data);
     dueTodayBooks = data;
+    createTodayTable();
 
     if (data.length > 0) {
       data.forEach(book => {
