@@ -2,11 +2,13 @@ let selectedBook = null;
 let searchResults = []; // Store search results globally
 let popularBooks = [];
 let newestBooks = [];
+let beginnerBooks = [];
 let currentIndex = -1;
 
 document.addEventListener("DOMContentLoaded", async function() {
     fetchPopularBooks();
     fetchNewestBooks();
+    fetchBeginnerBooks();
     
     // Add event listener for the search button
     const searchButton = document.getElementById('searchButton');
@@ -95,13 +97,48 @@ async function fetchNewestBooks() {
                     }
                 } catch (coverError) {
                     console.error(`Error fetching cover for ISBN: ${isbn}`, coverError);
-                    carousnewestBookselBooks[i] = { isbn, coverUrl: "/search/static/images/error.png" };
+                    newestBooks[i] = { isbn, coverUrl: "/search/static/images/error.png" };
                 }
             }
             displayBooksForCarousel(newestBooks, "newest-inner");
         }
     } catch (error) {
         console.error("Error fetching newest books:", error);
+    }
+}
+
+// Function to fetch beginner books from the backend
+async function fetchBeginnerBooks() {
+    try {
+        const response = await fetch("/search/beginner");
+        const data = await response.json();
+        console.log(data);
+        if (data.isbns) {
+            const numBooksSlide = 5;
+            const numSlides = 2;
+            beginnerBooks = data.isbns.slice(0, numBooksSlide * numSlides);
+            // Get cover images
+            for (let i = 0; i < beginnerBooks.length; i++) {
+                let isbn = beginnerBooks[i];
+                try {
+                    const coverResponse = await fetch(`/search/serve-book-cover/${isbn}`);
+                    if (coverResponse.ok) {
+                        let blob = await coverResponse.blob();
+                        let coverBlob = new Blob([blob], { type: "image/jpg" });
+                        let blobUrl = URL.createObjectURL(coverBlob);
+                        beginnerBooks[i] = { isbn, coverUrl: blobUrl };
+                    } else {
+                        beginnerBooks[i] = { isbn, coverUrl: "/search/static/images/error.png" };
+                    }
+                } catch (coverError) {
+                    console.error(`Error fetching cover for ISBN: ${isbn}`, coverError);
+                    beginnerBooks[i] = { isbn, coverUrl: "/search/static/images/error.png" };
+                }
+            }
+            displayBooksForCarousel(beginnerBooks, "beginner-inner");
+        }
+    } catch (error) {
+        console.error("Error fetching beginner books:", error);
     }
 }
 

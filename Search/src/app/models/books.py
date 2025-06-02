@@ -171,6 +171,12 @@ def get_newest():
     books_list = list(books)
     return books_list[-10:]
 
+@app.get("/beginner-books", response_model=List[Book])
+def get_beginner():
+    books = db["books"].find({"kidFriendly": True})
+    books_list = list(books)
+    return books_list[-10:]
+
 @app.get("/popular-books", response_model=List[Book])
 def get_popular():
     books = db["books"].find().sort("rating", -1).limit(10)

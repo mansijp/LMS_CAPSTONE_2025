@@ -98,6 +98,15 @@ async def get_newest_books():
         content["isbns"].append(book["isbn"])
     return JSONResponse(content) 
 
+@router.get("/beginner", response_class=JSONResponse)
+async def get_beginner_books():
+    results = get_beginner()  
+    content = {'titles':[], 'isbns':[]}
+    for book in results:
+        content["titles"].append(book["title"])
+        content["isbns"].append(book["isbn"])
+    return JSONResponse(content) 
+
 @router.get("/serve-book-cover/{isbn}", response_class=StreamingResponse)
 async def serve_cover(isbn: str):
     data = await get_book_cover(isbn)
